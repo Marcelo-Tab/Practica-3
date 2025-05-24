@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PRODUCTOS - MI YERBA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .video-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -10;
+        overflow: hidden;
+      }
+      #player {
+        width: 100vw;
+        height: 56.25vw;
+        min-height: 100vh;
+        min-width: 177.77vh;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1.8);
+        opacity: 0.35;
+        pointer-events: none;
+      }
+
+      /* NUEVO: estilos para las imágenes */
+      .yerba-img {
+        mix-blend-mode: multiply;
+        background-color: transparent;
+      }
+    </style>
+  </head>
+  <body class="bg-transparent text-black">
+    <div class="video-container">
+      <div id="player"></div>
+    </div>
+
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script>
+      var tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player("player", {
+          videoId: "5tfbqPopVxE",
+          playerVars: {
+            autoplay: 1,
+            controls: 0,
+            mute: 1,
+            loop: 1,
+            playlist: "5tfbqPopVxE",
+          },
+        });
+      }
+    </script>
+
+    <script type="text/babel">
+      function App() {
+        const [carrito, setCarrito] = React.useState([]);
+        const yerbas = [
+          {
+            nombre: "VerdeFlor",
+            img: "https://veaargentina.vtexassets.com/arquivos/ids/657416/Yerba-Mate-Verdeflor-C-palo-Naranja-Sabor-Naranja-Sin-Atributo-Sin-Atributo-1-105281.jpg?v=637629201187700000",
+            peso: "500g",
+            origen: "Argentina",
+            sabor: "Intenso",
+            precio: 35,
+          },
+          {
+            nombre: "RosaMonte",
+            img: "https://acdn-us.mitiendanube.com/stores/805/409/products/02-render-rosamonte-tradicional-x-500g-final-1-fa104fbb23cf54e43917053428163617-480-0.jpg",
+            peso: "1kg",
+            origen: "Argentina",
+            sabor: "Suave",
+            precio: 40,
+          },
+          {
+            nombre: "Playadito",
+            img: "https://cdn11.bigcommerce.com/s-3stx4pub31/images/stencil/590x590/products/169/7786/500suave__53123.1657568195.jpg?c=2",
+            peso: "750g",
+            origen: "Brasil",
+            sabor: "Dulce",
+            precio: 30,
+          },
+          {
+            nombre: "Taragüi",
+            img: "https://tienda306.com/1304-medium_default/taragui-yerba-mate-mezcla-regular-energizante-500g.jpg",
+            peso: "500g",
+            origen: "Uruguay",
+            sabor: "Aromático",
+            precio: 20,
+          },
+        ];
+
+        const agregarAlCarrito = (yerba) => {
+          setCarrito([...carrito, yerba]);
+        };
+
+        const menuItems = [
+          { label: "INICIO", href: "index.html" },
+          { label: "SERVICIOS", href: "servicios.html" },
+          { label: "PRODUCTOS", href: "productos.html" },
+          { label: "CONTACTOS", href: "contactos.html" },
+          { label: "MERCH", href: "merch.html" },
+        ];
+
+        const total = carrito.reduce((acc, item) => acc + item.precio, 0);
+
+        const pagar = () => {
+          alert("Gracias por tu compra 🧉. Pronto nos pondremos en contacto.");
+          setCarrito([]);
+        };
+
+        return (
+          <div className="min-h-screen flex flex-col justify-between relative z-10">
+            <header className="py-4 px-4 sm:px-6 text-center bg-transparent backdrop-blur-sm">
+              <h1 className="text-2xl sm:text-4xl font-bold text-gray-900">
+                MI YERBA
+              </h1>
+              <nav className="flex justify-center mt-2 text-lg flex-wrap gap-x-2">
+                {menuItems.map(({ label, href }, i) => (
+                  <React.Fragment key={i}>
+                    <a href={href} className="font-bold hover:text-yellow-600">
+                      {label}
+                    </a>
+                    {i < menuItems.length - 1 && (
+                      <span className="text-gray-400 select-none">|</span>
+                    )}
+                  </React.Fragment>
+                ))}
+              </nav>
+            </header>
+
+            <main className="pt-12 px-4 pb-24 flex-grow">
+              <h2 className="text-3xl font-bold mb-6 text-center">
+                Yerbas Disponibles
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                {yerbas.map((yerba, index) => (
+                  <div
+                    key={index}
+                    className="bg-[#F4C67C] backdrop-blur-md rounded-xl p-4 shadow-lg flex flex-col items-center transition-transform transform hover:scale-105"
+                  >
+                    <img
+                      src={yerba.img}
+                      alt={yerba.nombre}
+                      className="w-24 h-24 object-contain mb-3 yerba-img"
+                    />
+                    <h3 className="text-xl font-semibold">{yerba.nombre}</h3>
+                    <p className="text-sm">Peso: {yerba.peso}</p>
+                    <p className="text-sm">Origen: {yerba.origen}</p>
+                    <p className="text-sm">Sabor: {yerba.sabor}</p>
+                    <p className="text-sm font-bold mt-1">S/ {yerba.precio}</p>
+                    <button
+                      onClick={() => agregarAlCarrito(yerba)}
+                      className="mt-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-1 px-4 rounded-full text-sm transition"
+                    >
+                      Agregar al carrito
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-12 text-center">
+                <h3 className="text-2xl font-bold mb-2">
+                  🛒 Carrito ({carrito.length})
+                </h3>
+                {carrito.length === 0 ? (
+                  <p className="text-gray-600">Tu carrito está vacío.</p>
+                ) : (
+                  <div className="inline-block text-left bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow">
+                    <ul className="mb-2">
+                      {carrito.map((item, i) => (
+                        <li key={i} className="text-sm mb-1">
+                          {item.nombre} - {item.peso} - S/ {item.precio}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="font-bold">Total: S/ {total}</p>
+                    <button
+                      onClick={pagar}
+                      className="mt-2 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-1 px-4 rounded-full text-sm transition"
+                    >
+                      Pagar
+                    </button>
+                  </div>
+                )}
+              </div>
+            </main>
+
+            <footer className="py-3 text-center bg-transparent backdrop-blur-sm">
+              <p className="text-xs md:text-base text-gray-600 mb-1">
+                © MI YERBA. Todos los derechos reservados.
+              </p>
+              <p className="text-xs md:text-base text-gray-600">
+                La Molina, Av. la Fontana 1250, Lima 15024
+              </p>
+            </footer>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>

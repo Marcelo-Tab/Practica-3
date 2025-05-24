@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MI YERBA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {},
+        },
+      };
+    </script>
+    <style>
+      .video-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -10;
+        overflow: hidden;
+      }
+      #player {
+        width: 100vw;
+        height: 56.25vw;
+        min-height: 100vh;
+        min-width: 177.77vh;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1.8);
+        opacity: 0.35;
+        pointer-events: none;
+      }
+      html,
+      body {
+        background: transparent;
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+      }
+    </style>
+  </head>
+  <body class="bg-transparent overflow-x-hidden">
+    <div class="video-container">
+      <div id="player"></div>
+    </div>
+
+    <div id="root" class="relative z-10"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script>
+      var tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player("player", {
+          videoId: "5tfbqPopVxE",
+          playerVars: {
+            autoplay: 1,
+            controls: 0,
+            mute: 1,
+            loop: 1,
+            playlist: "5tfbqPopVxE",
+            modestbranding: 1,
+            rel: 0,
+            showinfo: 0,
+          },
+          events: {
+            onReady: onPlayerReady,
+          },
+        });
+      }
+
+      function onPlayerReady(event) {
+        event.target.playVideo();
+        setInterval(() => {
+          const currentTime = player.getCurrentTime();
+          if (currentTime >= 270) {
+            player.seekTo(0);
+            player.playVideo();
+          }
+        }, 500);
+      }
+    </script>
+
+    <script type="text/babel">
+      function App() {
+        const [menuOpen, setMenuOpen] = React.useState(false);
+
+        const menuItems = [
+          { label: "INICIO", link: "index.html" },
+          { label: "SERVICIOS", link: "servicios.html" },
+          { label: "PRODUCTOS", link: "productos.html" },
+          { label: "CONTACTOS", link: "contactos.html" },
+          { label: "MERCH", link: "merch.html" },
+        ];
+
+        return (
+          <div className="min-h-screen flex flex-col justify-between text-black relative z-10">
+            <header className="py-6 px-4 sm:px-6 text-center bg-transparent backdrop-blur-sm">
+              <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+                MI YERBA
+              </h1>
+
+              <div className="sm:hidden mb-4">
+                <button
+                  className="text-gray-800 font-bold"
+                  onClick={() => setMenuOpen(!menuOpen)}
+                >
+                  ☰ Menú
+                </button>
+                {menuOpen && (
+                  <div className="mt-2 space-y-2">
+                    {menuItems.map((item, i) => (
+                      <a
+                        key={i}
+                        href={item.link}
+                        className="block font-bold hover:text-yellow-600"
+                      >
+                        {item.label}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <nav className="hidden sm:flex justify-center space-x-4 text-lg">
+                {menuItems.map((item, i) => (
+                  <React.Fragment key={i}>
+                    <a
+                      href={item.link}
+                      className="font-bold hover:text-yellow-600"
+                    >
+                      {item.label}
+                    </a>
+                    {i < menuItems.length - 1 && (
+                      <span className="text-gray-400">|</span>
+                    )}
+                  </React.Fragment>
+                ))}
+              </nav>
+            </header>
+
+            <main className="flex flex-col md:flex-row items-center justify-center px-4 sm:px-8 gap-8 py-10">
+              <div className="flex flex-col items-center text-center">
+                <img
+                  src="https://cm1.aminoapps.com/6386/83e43f8e49a87cf144f1a4a2e9f03b67d2e1e02c_00.jpg"
+                  alt="Creador de la compañía"
+                  className="w-40 sm:w-48 h-40 sm:h-48 object-cover rounded-full"
+                />
+                <div className="mt-4 w-full max-w-xs p-4 bg-white/70 backdrop-blur-sm rounded-md shadow-md">
+                  <h2 className="font-bold text-lg mb-1">Luis Contreras</h2>
+                  <p className="text-sm">Fundador y CEO</p>
+                  <p className="text-sm">Email: luis@miyerba.com</p>
+                  <p className="text-sm">Tel: +51 999 888 777</p>
+                </div>
+              </div>
+
+              <div className="w-full max-w-2xl p-6 bg-white/70 backdrop-blur-sm rounded-md shadow-md">
+                <h2 className="text-2xl font-bold mb-4">Nuestra Historia</h2>
+                <p className="mb-4">
+                  📖La Pasión de Luis Contreras por el Mate En el corazón de La
+                  Molina, Lima, donde el ritmo de la ciudad se mezcla con
+                  tradiciones de todo el mundo, nació MIYERBA, una empresa
+                  dedicada a llevar el auténtico sabor del mate a los hogares
+                  del Perú. Detrás de esta visión está Luis Contreras, un
+                  emprendedor apasionado por las raíces sudamericanas y el arte
+                  de compartir historias alrededor de una buena yerba.
+                </p>
+                <p className="mb-4">
+                  🌱Luis Contreras siempre tuvo un vínculo especial con las
+                  tradiciones de Sudamérica. Durante sus viajes por Argentina,
+                  Paraguay y Uruguay, descubrió que el mate no era solo una
+                  bebida, sino un símbolo de comunidad, energía y herencia
+                  cultural. Sin embargo, en Perú, notó que era difícil encontrar
+                  yerba mate de calidad premium, auténtica y con procedencia
+                  garantizada. Fue así que, en 2015, decidió dar el salto. Con
+                  un pequeño local en Av. La Fontana 1250, La Molina, comenzó a
+                  importar yerba mate directamente de los mejores productores
+                  del Cono Sur. Lo que empezó como un emprendimiento familiar,
+                  pronto se convirtió en un referente para los amantes del mate
+                  en Lima.
+                </p>
+                <p className="mb-4">
+                  🚀Luis no solo vendía yerba; educaba a sus clientes. Organizó
+                  círculos de mate, talleres sobre sus beneficios y hasta catas
+                  para diferenciar los sabores de cada región. Pronto, MIYERBA
+                  se convirtió en un punto de encuentro para argentinos,
+                  paraguayos, uruguayos y peruanos curiosos por probar esta
+                  infusión. Hoy, MIYERBA sigue en su ubicación emblemática de La
+                  Molina, pero con presencia online y una red de distribuidores.
+                  Luis mantiene su compromiso con: Calidad: Yerbas
+                  seleccionadas, sin mezclas artificiales. Tradición: Cada
+                  paquete cuenta la historia de su origen. Innovación: Nuevas
+                  blends (como yerbas saborizadas o para tereré).
+                </p>
+                <p className="mb-4">
+                  🔮Luis sueña con que MIYERBA sea la marca líder de mate en
+                  Perú y expandirse a otros países. Pero su mayor orgullo es ver
+                  cómo, alrededor de un mate, se crean amistades y se mantienen
+                  vivas las tradiciones. "El mate no se toma solo… se comparte.
+                  Y eso es lo que queremos recordarle al mundo." — Luis
+                  Contreras, Fundador de MIYERBA.
+                </p>
+              </div>
+            </main>
+
+            <footer className="py-6 text-center bg-transparent backdrop-blur-sm">
+              <p className="text-gray-600 mb-2">
+                © MI YERBA. Todos los derechos reservados.
+              </p>
+              <p className="text-gray-600">
+                La Molina, Av. la Fontana 1250, Lima 15024
+              </p>
+            </footer>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
